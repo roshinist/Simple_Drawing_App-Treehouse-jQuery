@@ -53,12 +53,13 @@ $('input[type=range]').on('input', changeColor);
 	
 //When 'addColor' is clicked
 $('#addNewColor').click(function(){
-	var color = $('#newColor').css('background-color');
+	var color1 = $('#newColor').css('background-color');
 	$controlsElements.siblings().removeClass('selected');
-	var colorListElement = '<li class="selected" style="background:'+ color+'"></li>';
+	var colorListElement = '<li class="selected" style="background:'+ color1+'"></li>';
 	$controls.append(colorListElement);
-	console.log(color);
+	console.log(color1);
 	console.log(colorListElement);
+	color = color1;
 });
 	//Append color to 'ul' list controls
 	//Select the newColor with white circle
@@ -66,6 +67,31 @@ $('#addNewColor').click(function(){
 //On Mouse events ons canvas
 	//Draw lines --> (PURE JAVASCRIPT)
 
+//global variable
+var lastEvent; 
+var mouseDown = false;
+
+var context = $('canvas')[0].getContext('2d');
+
+var $canvas = $('canvas');
+$canvas.mousedown(function(e){
+  lastEvent = e;
+  mouseDown = true;
+}).mousemove(function(e){
+  if (mouseDown){
+    context.beginPath();
+    //CONFUSED ABOUT DIFFERENCE BETWEEN lastEvent AND e!!
+    context.moveTo(lastEvent.offsetX,lastEvent.offsetY);
+    context.lineTo(e.offsetX,e.offsetY);
+    context.strokeStyle = color;
+    context.stroke();
+    lastEvent = e;
+  }
+}).mouseup(function(){
+  mouseDown = false;
+}).mouseleave(function(){
+  $canvas.mouseup();
+});
 
 
 
